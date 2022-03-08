@@ -5,7 +5,7 @@ import requests
 import telegram
 
 
-def verified_works(token):
+def get_verified_works(token):
     headers = {"Authorization": token}
     params = {}
     while True:
@@ -32,7 +32,7 @@ def send_request():
     tgm_token = os.environ["TGM_TOKEN"]
     chat_id = os.environ["TGM_CHAT_ID"]
 
-    result_checking = verified_works(dvmn_token)
+    result_checking = get_verified_works(dvmn_token)
     if result_checking["new_attempts"][0]["is_negative"] == True:
         text = f'К сожалению, в работе нашлись ошибки.\n\n' \
                f'ссылка на урок {result_checking["new_attempts"][0]["lesson_url"]}'
