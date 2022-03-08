@@ -26,7 +26,7 @@ def get_verified_works(token):
             continue
 
 
-def send_request():
+def main():
     load_dotenv()
     dvmn_token = os.environ["DVMN_TOKEN"]
     tgm_token = os.environ["TGM_TOKEN"]
@@ -45,4 +45,4 @@ def send_request():
 
 
 if __name__ == '__main__':
-    send_request()
+    main()
