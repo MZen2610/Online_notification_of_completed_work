@@ -12,7 +12,7 @@ chat_id = os.environ["TGM_CHAT_ID"]
 
 
 def send_telegram_message(checking_result):
-    if checking_result["new_attempts"][0]["is_negative"] == True:
+    if checking_result["new_attempts"][0]["is_negative"]:
         text = f'К сожалению, в работе нашлись ошибки.\n\n' \
                f'ссылка на урок {checking_result["new_attempts"][0]["lesson_url"]}'
     else:
