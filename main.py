@@ -16,9 +16,10 @@ def get_verified_works(token):
                                     timeout=10
                                     )
             response.raise_for_status()
-            if response.json()["status"] == "timeout":
-                params = {"timestamp": response.json()["timestamp_to_request"]}
-            return response.json()
+            response_json = response.json()
+            if response_json["status"] == "timeout":
+                params = {"timestamp": response_json["timestamp_to_request"]}
+            return response_json
 
         except requests.exceptions.ReadTimeout:
             continue
