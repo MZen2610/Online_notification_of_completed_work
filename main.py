@@ -30,7 +30,7 @@ def send_request():
     load_dotenv()
     dvmn_token = os.environ["DVMN_TOKEN"]
     tgm_token = os.environ["TGM_TOKEN"]
-    chat_id = os.environ["CHAT_ID"]
+    chat_id = os.environ["TGM_CHAT_ID"]
 
     result_checking = verified_works(dvmn_token)
     if result_checking["new_attempts"][0]["is_negative"] == True:
