@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import requests
 import telegram
+import time
 
 
 def get_verified_works(token):
@@ -24,7 +25,7 @@ def get_verified_works(token):
         except requests.exceptions.ReadTimeout:
             continue
         except ConnectionError:
-            continue
+            time.sleep(600)
 
 
 def main():
