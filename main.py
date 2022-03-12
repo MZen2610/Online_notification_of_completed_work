@@ -5,13 +5,8 @@ import requests
 import telegram
 import time
 
-load_dotenv()
-dvmn_token = os.environ["DVMN_TOKEN"]
-tgm_token = os.environ["TGM_TOKEN"]
-chat_id = os.environ["TGM_CHAT_ID"]
 
-
-def send_telegram_message(checking_result):
+def send_telegram_message(checking_result, tgm_token, chat_id):
     text = ""
     lesson_title = ""
     for key_result, value_result in checking_result.items():
@@ -33,8 +28,8 @@ def send_telegram_message(checking_result):
     bot.send_message(chat_id=chat_id, text=text_bot)
 
 
-def get_verified_works(token):
-    headers = {"Authorization": token}
+def get_verified_works(dvmn_token, tgm_token, chat_id):
+    headers = {"Authorization": dvmn_token}
     params = {}
     while True:
         try:
@@ -47,7 +42,7 @@ def get_verified_works(token):
             result = response.json()
             if result["status"] == "timeout":
                 params = {"timestamp": result["timestamp_to_request"]}
-            send_telegram_message(result)
+            send_telegram_message(result, tgm_token, chat_id)
         except requests.exceptions.ReadTimeout:
             continue
         except ConnectionError:
@@ -55,7 +50,11 @@ def get_verified_works(token):
 
 
 def main():
-    get_verified_works(dvmn_token)
+    load_dotenv()
+    dvmn_token = os.environ["DVMN_TOKEN"]
+    tgm_token = os.environ["TGM_TOKEN"]
+    chat_id = os.environ["TGM_CHAT_ID"]
+    get_verified_works(dvmn_token, tgm_token, chat_id)
 
 
 if __name__ == '__main__':
