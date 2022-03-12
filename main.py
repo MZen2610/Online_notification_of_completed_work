@@ -42,7 +42,8 @@ def check_work(dvmn_token, tgm_token, chat_id):
             result = response.json()
             if result["status"] == "timeout":
                 params = {"timestamp": result["timestamp_to_request"]}
-            send_telegram_message(result, tgm_token, chat_id)
+            elif result["status"] == "found":
+                send_telegram_message(result, tgm_token, chat_id)
         except requests.exceptions.ReadTimeout:
             continue
         except ConnectionError:
