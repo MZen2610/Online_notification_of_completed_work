@@ -28,7 +28,7 @@ def send_telegram_message(checking_result, tgm_token, chat_id):
     bot.send_message(chat_id=chat_id, text=text_bot)
 
 
-def get_verified_works(dvmn_token, tgm_token, chat_id):
+def check_work(dvmn_token, tgm_token, chat_id):
     headers = {"Authorization": dvmn_token}
     params = {}
     while True:
@@ -54,7 +54,7 @@ def main():
     dvmn_token = os.environ["DVMN_TOKEN"]
     tgm_token = os.environ["TGM_TOKEN"]
     chat_id = os.environ["TGM_CHAT_ID"]
-    get_verified_works(dvmn_token, tgm_token, chat_id)
+    check_work(dvmn_token, tgm_token, chat_id)
 
 
 if __name__ == '__main__':
