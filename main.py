@@ -4,6 +4,7 @@ import os
 import requests
 import telegram
 import time
+import logging
 
 
 def send_telegram_message(checking_result, tgm_token, chat_id):
@@ -47,6 +48,7 @@ def main():
     dvmn_token = os.environ["DVMN_TOKEN"]
     tgm_token = os.environ["TGM_TOKEN"]
     chat_id = os.environ["TGM_CHAT_ID"]
+    logging.warning("Бот запущен")
     check_work(dvmn_token, tgm_token, chat_id)
 
 
