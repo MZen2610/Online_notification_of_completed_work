@@ -6,6 +6,7 @@ import telegram
 import time
 import logging
 
+
 class TelegramLogsHandler(logging.Handler):
 
     def __init__(self, tg_bot, chat_id):
@@ -17,7 +18,8 @@ class TelegramLogsHandler(logging.Handler):
         log_entry = self.format(record)
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
-def send_telegram_message(checking_result, tgm_token, chat_id):
+
+def send_telegram_message(checking_result, tgm_token, chat_id, logger):
     last_attempt = checking_result['new_attempts'][0]
     if last_attempt["is_negative"]:
         text = f'К сожалению, в работе нашлись ошибки.\n\n' \
@@ -27,11 +29,12 @@ def send_telegram_message(checking_result, tgm_token, chat_id):
 
     text_bot = f'У вас проверили работу "{last_attempt["lesson_title"]}"\n\n {text}'
 
-    bot = telegram.Bot(token=tgm_token)
-    bot.send_message(chat_id=chat_id, text=text_bot)
+    # bot = telegram.Bot(token=tgm_token)
+    # bot.send_message(chat_id=chat_id, text=text_bot)
+    logger.warning(text_bot)
 
 
-def check_work(dvmn_token, tgm_token, chat_id):
+def check_work(dvmn_token, tgm_token, chat_id, logger):
     headers = {"Authorization": dvmn_token}
     params = {}
     while True:
@@ -46,10 +49,12 @@ def check_work(dvmn_token, tgm_token, chat_id):
             if result["status"] == "timeout":
                 params = {"timestamp": result["timestamp_to_request"]}
             elif result["status"] == "found":
-                send_telegram_message(result, tgm_token, chat_id)
+                send_telegram_message(result, tgm_token, chat_id, logger)
         except requests.exceptions.ReadTimeout:
+            logger.warning("Бот упал с ошибкой 'requests.exceptions.ReadTimeout'")
             continue
         except ConnectionError:
+            logger.warning("Ошибка 'Connection Error'")
             time.sleep(600)
 
 
@@ -60,8 +65,9 @@ def main():
     chat_id = os.environ["TGM_CHAT_ID"]
     logger = logging.getLogger("Logger")
     logger.setLevel(logging.WARNING)
-    logger.addHandler(TelegramLogsHandler(tgm_token, chat_id))
-    check_work(dvmn_token, tgm_token, chat_id)
+    logger.addHandler(TelegramLogsHandler(telegram.Bot(token=tgm_token), chat_id))
+    logger.warning("Бот запущен")
+    check_work(dvmn_token, tgm_token, chat_id, logger)
 
 
 if __name__ == "__main__":
